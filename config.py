@@ -350,12 +350,12 @@ def get_ssl_setting_for_url(url: str, transport_routes: list) -> bool:
     if not url or not transport_routes:
         return any(
             domain in normalized_url
-            for domain in ("vavoo.to", "vavoo.tv", "lokke.app", "mediahubmx")
+            for domain in ("vavoo.to", "vavoo.tv", "lokke.app", "mediahubmx", "vixsrc.to", "vix-content.net")
         )
 
     if any(
         domain in normalized_url
-        for domain in ("vavoo.to", "vavoo.tv", "lokke.app", "mediahubmx")
+        for domain in ("vavoo.to", "vavoo.tv", "lokke.app", "mediahubmx", "vixsrc.to", "vix-content.net")
     ):
         return True
 
