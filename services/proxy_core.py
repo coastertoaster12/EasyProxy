@@ -555,10 +555,12 @@ class HLSProxyCoreMixin:
         prefer_default_family = prefer_default_family_for_url(url)
 
         if proxy:
-            # Check if we have a cached session for this proxy
+            is_warp = "127.0.0.1:1080" in proxy
             if proxy in self.proxy_sessions:
                 cached_session = self.proxy_sessions[proxy]
                 if not cached_session.closed:
+                    if is_warp:
+                        return cached_session, proxy
                     atime = self._proxy_session_atimes.get(proxy, 0)
                     if time.time() - atime > 30:
                         logger.info(f"🧹 Closing idle proxy session: {proxy}")
