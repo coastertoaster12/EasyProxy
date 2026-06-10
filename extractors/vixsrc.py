@@ -539,6 +539,10 @@ class VixSrcExtractor:
         proxy_url = None
         if forced_proxy:
             proxy_url = get_solver_proxy_url(forced_proxy)
+        else:
+            raw = await self._preferred_proxy(url)
+            if raw:
+                proxy_url = get_solver_proxy_url(raw)
 
         def _run():
             from urllib.parse import urlparse as _up
