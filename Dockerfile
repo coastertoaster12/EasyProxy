@@ -23,6 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     chromium \
     xvfb \
+    python3-tk \
+    python3-dev \
     libnss3 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
