@@ -1005,7 +1005,7 @@
                             const idx = parseInt(e.target.dataset.index);
                             this.urls[idx][opt] = e.target.checked;
                             e.target.closest('.url-item-option').classList.toggle('active', e.target.checked);
-                            this.updateGenerateUrl();
+                            this.generate();
                         });
                     });
                     list.appendChild(el);
