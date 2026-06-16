@@ -10,7 +10,7 @@ import urllib.request
 from dotenv import load_dotenv
 from config_store import get as _cfg_get, set as _cfg_set, get_all as _cfg_get_all
 
-APP_VERSION = "2.9.18"
+APP_VERSION = "2.9.19"
 
 _proxy_source_cache: dict[str, tuple[float, list]] = {}
 _PROXY_SOURCE_TTL = 600
@@ -943,6 +943,8 @@ def get_system_stats():
     except Exception:
         pass
 
+    net_sent = 0
+    net_recv = 0
     try:
         import psutil
         cpu_percent = psutil.cpu_percent()
@@ -951,6 +953,16 @@ def get_system_stats():
         ram_used = mem.used
         ram_free = mem.available
         ram_percent = mem.percent
+        net = psutil.net_io_counters()
+        _now = time.time()
+        _prev = getattr(get_system_stats, "_net_prev", None)
+        _prev_ts = getattr(get_system_stats, "_net_prev_ts", None)
+        if _prev and _prev_ts and _now - _prev_ts > 0:
+            dt = _now - _prev_ts
+            net_sent = max(0, (net.bytes_sent - _prev[0]) / dt)
+            net_recv = max(0, (net.bytes_recv - _prev[1]) / dt)
+        get_system_stats._net_prev = (net.bytes_sent, net.bytes_recv)
+        get_system_stats._net_prev_ts = _now
     except Exception as e:
         logger.debug(f"psutil not available or error: {e}")
         try:
@@ -997,6 +1009,10 @@ def get_system_stats():
             "used": ram_used,
             "free": ram_free,
             "percent": round(ram_percent, 1)
+        },
+        "net": {
+            "sent": round(net_sent, 1),
+            "recv": round(net_recv, 1)
         }
     }
 
