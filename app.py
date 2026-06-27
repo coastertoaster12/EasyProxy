@@ -20,6 +20,12 @@ from config import PORT, RECORDINGS_DIR, APP_VERSION
 from services.recording_manager import RecordingManager
 from routes.recordings import setup_recording_routes
 
+# --- FIX FOR RENDER PERMISSION DENIED ERROR ---
+# If config points to an absolute root folder '/data', force it to local './data'
+if RECORDINGS_DIR.startswith('/data'):
+    RECORDINGS_DIR = f".{RECORDINGS_DIR}"
+# -----------------------------------------------
+
 logger = logging.getLogger(__name__)
 
 def _read_file(path):
