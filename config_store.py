@@ -5,8 +5,12 @@ import threading
 
 logger = logging.getLogger(__name__)
 
-_CONFIG_DIR = os.environ.get("CONFIG_DIR", "/data")
+# Fixed to use relative paths so Render has permission to write files
+_CONFIG_DIR = os.environ.get("CONFIG_DIR", "./data")
 _CONFIG_FILE = os.path.join(_CONFIG_DIR, "config.json")
+
+# Force the recording environment variable for app.py to point here as well
+os.environ["RECORDINGS_DIR"] = "./data/recordings"
 
 DEFAULT_CONFIG = {
     "enable_warp": False,
@@ -34,7 +38,7 @@ DEFAULT_CONFIG = {
     "proxy_exclude_domains": [],
     "mpd_mode": "legacy",
     "dvr_enabled": False,
-    "recordings_dir": "/data/recordings",
+    "recordings_dir": "./data/recordings",
     "max_recording_duration": 28800,
     "recordings_retention_days": 7,
     "flaresolverr_url": "http://localhost:8191",
